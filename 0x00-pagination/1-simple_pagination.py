@@ -2,7 +2,7 @@
 """Simple helper function for handling pagination"""
 import math
 import csv
-from typing import Tuple , List
+from typing import Tuple , List 
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
