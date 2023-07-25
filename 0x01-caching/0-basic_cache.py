@@ -2,6 +2,7 @@
 """Basic caching module Task"""
 from base_caching import BaseCaching
 
+
 class BasicCache(BaseCaching):
     """Represents an object that allows storing and
     retrieving items from a dictionary"""
