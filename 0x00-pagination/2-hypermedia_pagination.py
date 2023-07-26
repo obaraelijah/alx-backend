@@ -35,35 +35,37 @@ class Server:
 
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-            """Gets the items in a page of the dataset"""
-            assert (type(page) is int and page > 0)
-            assert (type(page_size) is int and page_size > 0)
-            data = self.dataset()
+        """Gets the items in a page of the dataset"""
+        assert (type(page) is int and page > 0)
+        assert (type(page_size) is int and page_size > 0)
+        data = self.dataset()
 
-            try:
-                p = index_range(page, page_size)[0]
-                size = index_range(page, page_size)[1]
-                return data[p: size]
-            except IndexError:
-                return []
+        try:
+            p = index_range(page, page_size)[0]
+            size = index_range(page, page_size)[1]
+            return data[p: size]
+        except IndexError:
+            return []
             
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
         """returns a dict of meta data"""
+        all_data = self.dataset()
         data = self.get_page(page, page_size)
-        if len(self.dataset()) % page_size == 0:
-            total_pages = len(self.dataset()) / page_size
-        else:
-            total_pages = len(self.dataset()) / page_size + 1
-        next_page = None if (page + 1) > total_pages else page + 1
-        prev_page = None if page - 1 < 0 else page - 1
+        ps = len(data)
+        total_pages = math.ceil(len(all_data) / page_size)
+        p, n = index_range(page, page_size)
+        prev_page = page - 1
+        next_page = page + 1
 
-        my_dict = {
-            'page': page,
-            'page_size': page_size,
-            'data': data,
-            'next_page': next_page,
-            'prev_page': prev_page,
-            'total_pages': int(total_pages)
-        }
-        return my_dict
+        if p <= 0:
+            prev_page = None
+        elif n > len(all_data):
+            next_page = None
+
+        return {'page_size': ps,
+                'page': page,
+                'data': data,
+                'next_page': next_page,
+                'prev_page': prev_page,
+                'total_pages': total_pages}
