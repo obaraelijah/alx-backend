@@ -1,1 +1,1 @@
-### internalization in python(flask)
+### i18n solutions
